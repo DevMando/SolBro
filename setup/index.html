@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SolBro — Setup Guide</title>
+<style>
+  :root {
+    --bg: #0f1115;
+    --panel: #161922;
+    --panel-2: #1d2230;
+    --border: #262b3a;
+    --text: #e7e9ee;
+    --text-dim: #9aa3b2;
+    --accent: #7c9cff;
+    --accent-hover: #a4b8ff;
+    --code-bg: #0b0d12;
+    --code-border: #2a2f3d;
+    --success: #5dd39e;
+    --warn: #f6b73c;
+    --danger: #ef6b6b;
+    --mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    line-height: 1.6;
+    font-size: 16px;
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    max-width: 1200px;
+    margin: 0 auto;
+    min-height: 100vh;
+  }
+
+  /* Sidebar */
+  nav.sidebar {
+    background: var(--panel);
+    border-right: 1px solid var(--border);
+    padding: 32px 24px;
+    position: sticky;
+    top: 0;
+    align-self: start;
+    max-height: 100vh;
+    overflow-y: auto;
+  }
+  nav .brand {
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 4px;
+    color: var(--text);
+  }
+  nav .sub {
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    margin-bottom: 24px;
+  }
+  nav ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    counter-reset: step;
+  }
+  nav ol li {
+    counter-increment: step;
+    margin-bottom: 4px;
+  }
+  nav ol li a {
+    display: block;
+    padding: 8px 12px;
+    color: var(--text-dim);
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 0.92rem;
+    transition: background 0.15s, color 0.15s;
+  }
+  nav ol li a::before {
+    content: counter(step) ". ";
+    color: var(--text-dim);
+    margin-right: 4px;
+  }
+  nav ol li a:hover {
+    background: var(--panel-2);
+    color: var(--text);
+  }
+
+  /* Main */
+  main {
+    padding: 56px 64px;
+    max-width: 860px;
+  }
+
+  h1 {
+    font-size: 2.2rem;
+    margin: 0 0 8px;
+    letter-spacing: -0.5px;
+  }
+  h1 + .lede {
+    color: var(--text-dim);
+    font-size: 1.1rem;
+    margin-bottom: 48px;
+  }
+
+  section {
+    margin-bottom: 56px;
+    scroll-margin-top: 24px;
+  }
+  section h2 {
+    font-size: 1.5rem;
+    margin: 0 0 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+  section h2 .num {
+    color: var(--accent);
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  h3 {
+    font-size: 1.1rem;
+    margin: 32px 0 12px;
+    color: var(--text);
+  }
+
+  p { margin: 0 0 14px; }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { color: var(--accent-hover); text-decoration: underline; }
+
+  /* Code */
+  code {
+    font-family: var(--mono);
+    font-size: 0.88em;
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 4px;
+    padding: 1px 6px;
+  }
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 8px;
+    padding: 16px 18px;
+    overflow-x: auto;
+    font-family: var(--mono);
+    font-size: 0.88em;
+    line-height: 1.5;
+    margin: 12px 0 20px;
+  }
+  pre code {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: inherit;
+  }
+
+  /* Ordered + unordered lists */
+  ol, ul { padding-left: 22px; margin: 12px 0 16px; }
+  li { margin-bottom: 6px; }
+  li > p { margin-bottom: 6px; }
+
+  /* Callouts */
+  .callout {
+    border-left: 3px solid var(--accent);
+    background: var(--panel);
+    padding: 14px 18px;
+    border-radius: 6px;
+    margin: 16px 0;
+  }
+  .callout.warn { border-left-color: var(--warn); }
+  .callout.danger { border-left-color: var(--danger); }
+  .callout.success { border-left-color: var(--success); }
+  .callout .label {
+    font-weight: 600;
+    margin-right: 6px;
+    color: var(--accent);
+  }
+  .callout.warn .label { color: var(--warn); }
+  .callout.danger .label { color: var(--danger); }
+  .callout.success .label { color: var(--success); }
+  .callout p:last-child { margin-bottom: 0; }
+
+  /* Service cards */
+  .service-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .service-card h3 {
+    margin-top: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .service-card .badges {
+    display: flex;
+    gap: 8px;
+    margin: 0 0 14px;
+    flex-wrap: wrap;
+  }
+  .badge {
+    font-size: 0.78rem;
+    padding: 3px 10px;
+    border-radius: 12px;
+    background: var(--panel-2);
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+  }
+  .badge.optional { color: var(--warn); border-color: rgba(246, 183, 60, 0.3); }
+  .badge.required { color: var(--success); border-color: rgba(93, 211, 158, 0.3); }
+  .badge.free { color: var(--accent); border-color: rgba(124, 156, 255, 0.3); }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 0.92rem;
+  }
+  th, td {
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+    padding: 10px 12px;
+    vertical-align: top;
+  }
+  th {
+    color: var(--text-dim);
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* Copy button on pre */
+  .code-wrap { position: relative; }
+  .copy-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    padding: 4px 10px;
+    border-radius: 5px;
+    font-size: 0.78rem;
+    cursor: pointer;
+    font-family: var(--sans);
+    transition: background 0.15s, color 0.15s;
+  }
+  .copy-btn:hover {
+    background: var(--accent);
+    color: #0b0d12;
+  }
+  .copy-btn.copied { background: var(--success); color: #0b0d12; }
+
+  /* Footer */
+  footer {
+    margin-top: 80px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    color: var(--text-dim);
+    font-size: 0.85rem;
+  }
+
+  /* Mobile */
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+    nav.sidebar { position: static; max-height: none; border-right: none; border-bottom: 1px solid var(--border); }
+    main { padding: 32px 24px; }
+  }
+
+  /* Reduce motion */
+  @media (prefers-reduced-motion) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="layout">
+
+  <nav class="sidebar">
+    <div class="brand">SolBro</div>
+    <div class="sub">An Ollama-powered Discord bot — setup guide</div>
+    <ol>
+      <li><a href="#prereqs">Prerequisites</a></li>
+      <li><a href="#ollama">Install Ollama &amp; pull models</a></li>
+      <li><a href="#discord">Create Discord application</a></li>
+      <li><a href="#invite">Invite the bot to a server</a></li>
+      <li><a href="#keys">Get API keys</a></li>
+      <li><a href="#env">Fill in <code>.env</code></a></li>
+      <li><a href="#personality">Define the personality</a></li>
+      <li><a href="#run">Run the bot</a></li>
+      <li><a href="#trouble">Troubleshooting</a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <h1>SolBro Setup Guide</h1>
+    <p class="lede">From a fresh clone to a working Ollama-powered Discord bot in about 20–30 minutes. SolBro started as a Solana meme-token tracker and grew into a general-purpose agentic bot. After setup, the personality is yours to define.</p>
+
+    <!-- 1 — Prerequisites -->
+    <section id="prereqs">
+      <h2><span class="num">Step 1</span> Prerequisites</h2>
+      <p>Install these first. Verify each is working before moving on.</p>
+
+      <h3>.NET 8 SDK <span class="badge required">Required</span></h3>
+      <p>Download from <a href="https://dotnet.microsoft.com/download/dotnet/8.0" target="_blank" rel="noopener">dotnet.microsoft.com</a>. The <em>SDK</em>, not just the runtime.</p>
+      <p>Verify:</p>
+      <div class="code-wrap"><pre><code>dotnet --version</code></pre></div>
+      <p>Should print <code>8.x.x</code>.</p>
+
+      <h3>Ollama <span class="badge required">Required</span></h3>
+      <p>Ollama is the local LLM runner. Download the installer for your OS from <a href="https://ollama.ai" target="_blank" rel="noopener">ollama.ai</a>.</p>
+      <p>On Linux, the one-liner installer:</p>
+      <div class="code-wrap"><pre><code>curl -fsSL https://ollama.ai/install.sh | sh</code></pre></div>
+      <p>After install, verify the daemon is reachable:</p>
+      <div class="code-wrap"><pre><code>curl http://localhost:11434/api/tags</code></pre></div>
+      <p>Should return JSON. If it doesn't, open the Ollama desktop app or run <code>ollama serve</code>.</p>
+
+      <h3>yt-dlp <span class="badge optional">Optional</span></h3>
+      <p>Only needed if you want the bot to re-upload videos from Instagram / X / TikTok / Facebook / YouTube Shorts links pasted in chat.</p>
+      <table>
+        <tr><th>OS</th><th>Command</th></tr>
+        <tr><td>Windows</td><td><code>winget install yt-dlp</code></td></tr>
+        <tr><td>macOS</td><td><code>brew install yt-dlp</code></td></tr>
+        <tr><td>Linux / pip</td><td><code>pip install -U yt-dlp</code></td></tr>
+      </table>
+      <p>Verify: <code>yt-dlp --version</code>. If you skip this, video extraction silently no-ops.</p>
+
+      <h3>Clone the repo <span class="badge required">Required</span></h3>
+      <div class="code-wrap"><pre><code>git clone https://github.com/&lt;your-username&gt;/SolBro.git
+cd SolBro</code></pre></div>
+    </section>
+
+    <!-- 2 — Ollama models -->
+    <section id="ollama">
+      <h2><span class="num">Step 2</span> Pull Ollama models</h2>
+      <p>You need at least a chat model. A vision model is optional but unlocks image understanding.</p>
+
+      <h3>Chat model</h3>
+      <p><strong>Strongly recommended:</strong> a cloud Ollama model — the default is <code>minimax-m2.7:cloud</code>.</p>
+      <p>Cloud models are the way to go for this bot. They're frontier-tier in capability, more efficient than anything you can realistically run locally, and they have noticeably better tool-calling — which matters because the bot leans on the model to <em>decide</em> when to search the web, drop a GIF, read a document, or generate a file. Frontier cloud models do that reliably; small local models often don't.</p>
+      <ul>
+        <li><strong>No GPU required</strong> — your machine only handles Discord I/O.</li>
+        <li><strong>Fast</strong> — cloud inference beats most consumer GPUs above ~7B params.</li>
+        <li><strong>Always current</strong> — Ollama maintains the cloud models; no re-pulling big checkpoints.</li>
+        <li><strong>Free for personal use</strong> — Ollama's cloud tier has a generous free quota.</li>
+      </ul>
+      <p>Cloud models need a one-time auth so your machine can reach Ollama's cloud:</p>
+      <div class="code-wrap"><pre><code>ollama signin</code></pre></div>
+      <p>This opens a browser to log in to (or create) your free Ollama account. After that, the cloud model is reachable like any local one — no other config.</p>
+
+      <table>
+        <tr><th>Model</th><th>Where it runs</th><th>Notes</th></tr>
+        <tr><td><strong><code>minimax-m2.7:cloud</code></strong></td><td>Ollama cloud</td><td><strong>Recommended.</strong> Frontier-class, strong tool calling, efficient. Requires <code>ollama signin</code>.</td></tr>
+        <tr><td>Other <code>:cloud</code> tags</td><td>Ollama cloud</td><td>Browse <a href="https://ollama.com/library" target="_blank" rel="noopener">ollama.com/library</a> for the current cloud-eligible roster.</td></tr>
+        <tr><td><code>mistral-nemo</code></td><td>Local ~8 GB</td><td>Best local tool-calling. Use this if you need fully-offline.</td></tr>
+        <tr><td><code>llama3.1:8b</code></td><td>Local ~8 GB</td><td>Balanced. Strong general reasoning.</td></tr>
+        <tr><td><code>qwen3:4b</code></td><td>Local ~4 GB</td><td>Smallest viable local option. Tool calling is hit-or-miss.</td></tr>
+        <tr><td><code>qwen2.5:14b</code></td><td>Local ~10 GB</td><td>Larger, smarter.</td></tr>
+        <tr><td><code>gpt-oss:20b</code></td><td>Local ~16 GB</td><td>Heavyweight.</td></tr>
+      </table>
+      <p>For any of the <em>local</em> models, pull it first:</p>
+      <div class="code-wrap"><pre><code>ollama pull &lt;model-name&gt;</code></pre></div>
+
+      <div class="callout warn">
+        <span class="label">Heads up</span>
+        If your bot ends up rarely using GIFs, web search, or other tools, your model's tool-calling is too weak. Switch to a cloud model or <code>mistral-nemo</code> locally — both are markedly better at deciding when to invoke functions.
+      </div>
+
+      <h3>Vision model <span class="badge optional">Optional</span></h3>
+      <p>Skip this if you don't want image understanding. Otherwise:</p>
+      <div class="code-wrap"><pre><code>ollama pull llava:7b</code></pre></div>
+      <p>Alternatives: <code>llava:13b</code>, <code>llama3.2-vision</code>, <code>bakllava</code>.</p>
+
+      <p>Verify everything pulled:</p>
+      <div class="code-wrap"><pre><code>ollama list</code></pre></div>
+    </section>
+
+    <!-- 3 — Discord -->
+    <section id="discord">
+      <h2><span class="num">Step 3</span> Create the Discord application</h2>
+
+      <ol>
+        <li>Open <a href="https://discord.com/developers/applications" target="_blank" rel="noopener">discord.com/developers/applications</a>.</li>
+        <li>Click <strong>New Application</strong> (top right). Name it whatever you want your bot called.</li>
+        <li>Accept the terms, click <strong>Create</strong>.</li>
+      </ol>
+
+      <h3>Get the bot token</h3>
+      <ol>
+        <li>In the left sidebar of the application page, click <strong>Bot</strong>.</li>
+        <li>Click <strong>Reset Token</strong> (or <strong>Copy</strong>) and save it somewhere safe.</li>
+      </ol>
+
+      <div class="callout danger">
+        <span class="label">Warning</span>
+        Discord only shows the token once. Copy it now and don't share it. If you lose it, you have to reset and update <code>.env</code>.
+      </div>
+
+      <h3>Enable privileged intents</h3>
+      <p>Still on the <strong>Bot</strong> page, scroll down to <strong>Privileged Gateway Intents</strong>. Toggle on all three:</p>
+      <ul>
+        <li><strong>Presence Intent</strong> — needed for stream notifications</li>
+        <li><strong>Server Members Intent</strong> — needed for stream notifications</li>
+        <li><strong>Message Content Intent</strong> — required for reading messages</li>
+      </ul>
+      <p>Click <strong>Save Changes</strong>.</p>
+
+      <div class="callout warn">
+        <span class="label">Gotcha</span>
+        Without <strong>Message Content Intent</strong>, the bot connects fine but can't see what anyone says. This is the #1 cause of "the bot doesn't respond" issues.
+      </div>
+    </section>
+
+    <!-- 4 — Invite -->
+    <section id="invite">
+      <h2><span class="num">Step 4</span> Invite the bot to a server</h2>
+      <p>You need a Discord server you own or have <em>Manage Server</em> permission on.</p>
+
+      <ol>
+        <li>In the developer portal sidebar, click <strong>OAuth2 → URL Generator</strong>.</li>
+        <li>Under <strong>Scopes</strong>, tick:
+          <ul>
+            <li><code>bot</code></li>
+            <li><code>applications.commands</code></li>
+          </ul>
+        </li>
+        <li>A new <strong>Bot Permissions</strong> panel appears. Tick:
+          <ul>
+            <li>Send Messages</li>
+            <li>Read Message History</li>
+            <li>Add Reactions</li>
+            <li>Attach Files</li>
+            <li>Manage Messages <em>(suppresses link previews when re-uploading videos)</em></li>
+            <li>Use Slash Commands</li>
+          </ul>
+        </li>
+        <li>Copy the <strong>Generated URL</strong> at the bottom and open it in a new tab.</li>
+        <li>Pick your server, click <strong>Continue → Authorize</strong>, pass the CAPTCHA.</li>
+      </ol>
+
+      <p>The bot should now appear in your server's member list as <strong>Offline</strong> (it'll go online in Step 8).</p>
+    </section>
+
+    <!-- 5 — API keys -->
+    <section id="keys">
+      <h2><span class="num">Step 5</span> Get API keys for optional features</h2>
+      <p>All three are optional and have free tiers. Skip any you don't want. The bot will still work — affected features just gracefully report "not configured."</p>
+
+      <!-- Tavily -->
+      <div class="service-card">
+        <h3>Tavily — Web search</h3>
+        <div class="badges">
+          <span class="badge optional">Optional</span>
+          <span class="badge free">Free 1000 calls/mo</span>
+        </div>
+        <p>Lets the model search the web with AI-friendly snippets. Without this, it falls back to scraping DuckDuckGo HTML — works, but flakier.</p>
+        <ol>
+          <li>Open <a href="https://tavily.com" target="_blank" rel="noopener">tavily.com</a> and click <strong>Get Started</strong>.</li>
+          <li>Sign up with email or Google.</li>
+          <li>After login, look for <strong>API Keys</strong> in the dashboard sidebar.</li>
+          <li>Copy your key — it starts with <code>tvly-</code>.</li>
+        </ol>
+        <p><strong>Goes into <code>.env</code> as:</strong></p>
+        <div class="code-wrap"><pre><code>Tavily__ApiKey=tvly-xxxxxxxxxxxxxxxxxxxxxxxx</code></pre></div>
+      </div>
+
+      <!-- Giphy -->
+      <div class="service-card">
+        <h3>Giphy — GIF search</h3>
+        <div class="badges">
+          <span class="badge optional">Optional</span>
+          <span class="badge free">Free beta key</span>
+        </div>
+        <p>The model decides when to drop a GIF in the conversation. Without a key, the bot says "GIF search is not configured."</p>
+        <ol>
+          <li>Open <a href="https://developers.giphy.com" target="_blank" rel="noopener">developers.giphy.com</a> and click <strong>Create an App</strong>.</li>
+          <li>Sign up if you don't have an account, then click <strong>Create an App</strong> again.</li>
+          <li>Choose <strong>API</strong> (not SDK), click <strong>Next Step</strong>.</li>
+          <li>Name your app something like "Discord Bot" and give it a one-line description.</li>
+          <li>Agree to the terms, click <strong>Create App</strong>.</li>
+          <li>Your API key shows on the dashboard — a long alphanumeric string. Copy it.</li>
+        </ol>
+        <p><strong>Goes into <code>.env</code> as:</strong></p>
+        <div class="code-wrap"><pre><code>Giphy__ApiKey=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code></pre></div>
+      </div>
+
+      <!-- Weather -->
+      <div class="service-card">
+        <h3>Visual Crossing — Weather</h3>
+        <div class="badges">
+          <span class="badge optional">Optional</span>
+          <span class="badge free">Free 1000 records/day</span>
+        </div>
+        <p>Enables "what's the weather in Tokyo?" style queries.</p>
+        <ol>
+          <li>Open <a href="https://www.visualcrossing.com/weather-api" target="_blank" rel="noopener">visualcrossing.com/weather-api</a> and click <strong>Sign Up</strong> in the top right.</li>
+          <li>Sign up with email; they'll send a verification.</li>
+          <li>After verifying, log in and click <strong>Account</strong> in the top nav.</li>
+          <li>Scroll to <strong>Your Key</strong> and copy the value.</li>
+        </ol>
+        <p><strong>Goes into <code>.env</code> as:</strong></p>
+        <div class="code-wrap"><pre><code>Weather__ApiKey=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code></pre></div>
+      </div>
+    </section>
+
+    <!-- 6 — env -->
+    <section id="env">
+      <h2><span class="num">Step 6</span> Fill in <code>.env</code></h2>
+      <p>From the repo root, copy the template:</p>
+      <div class="code-wrap"><pre><code># Windows PowerShell
+Copy-Item .env.example .env
+
+# macOS / Linux
+cp .env.example .env</code></pre></div>
+
+      <p>Open <code>.env</code> in any text editor and paste in the values you collected. A complete file looks like this:</p>
+
+      <div class="code-wrap">
+        <button class="copy-btn" data-copy-target="env-sample">Copy</button>
+        <pre id="env-sample"><code>Discord_Token=MTIxxxxxxxxxxxxxxx...
+
+OLLAMA__Host=http://localhost:11434
+OLLAMA__Model=minimax-m2.7:cloud
+OLLAMA__VisionModel=llava:7b
+OLLAMA__SystemPrompt=You are a helpful, concise Discord assistant. Match the tone of whoever you're talking to.
+
+Tavily__ApiKey=tvly-xxxxxxxxxxxxxxxx
+Giphy__ApiKey=xxxxxxxxxxxxxxxxxxxxxx
+Weather__ApiKey=xxxxxxxxxxxxxxxxxxxxxx
+
+StreamNotificationChannel=gaming-general</code></pre>
+      </div>
+
+      <div class="callout warn">
+        <span class="label">Common mistakes</span>
+        <ul>
+          <li>Wrapping the token in quotes — don't. Values in <code>.env</code> are unquoted.</li>
+          <li>Using <code>OLLAMA:Host</code> syntax — that's for <code>appsettings.json</code>. In <code>.env</code>, use <code>OLLAMA__Host</code> (double underscore).</li>
+          <li>Saving as <code>.env.txt</code> on Windows — Notepad does this silently. Verify in a terminal: <code>dir .env</code>.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 7 — personality -->
+    <section id="personality">
+      <h2><span class="num">Step 7</span> Define your bot's personality</h2>
+      <p>This is the part that makes the bot <em>yours</em>. The <code>OLLAMA__SystemPrompt</code> value in <code>.env</code> is the bot's identity. The bot automatically appends operational instructions (how to use tools, handle mentions, etc.) — so you only define <em>personality</em>.</p>
+
+      <h3>Examples to riff on</h3>
+      <div class="code-wrap"><pre><code># Helpful default
+OLLAMA__SystemPrompt=You are a helpful, concise Discord assistant. Match the tone of whoever you're talking to.
+
+# Themed character
+OLLAMA__SystemPrompt=You are a snarky pirate captain. Reply in pirate slang. Reference the seven seas often.
+
+# Domain expert
+OLLAMA__SystemPrompt=You are a senior staff engineer reviewing code. Be direct. Point out bugs and design smells.
+
+# Tabletop NPC
+OLLAMA__SystemPrompt=You are Grix, a goblin merchant. You speak with broken grammar and try to upsell cursed trinkets.
+
+# Server mascot
+OLLAMA__SystemPrompt=You are the mascot of the &lt;your server&gt; community. You love the people in this server.</code></pre></div>
+
+      <p>If you leave it blank, a generic helpful-assistant default is used.</p>
+    </section>
+
+    <!-- 8 — Run -->
+    <section id="run">
+      <h2><span class="num">Step 8</span> Run the bot</h2>
+      <p>From the repo root:</p>
+      <div class="code-wrap"><pre><code>dotnet run</code></pre></div>
+
+      <p>Watch the terminal output. You're looking for these five lines:</p>
+      <ol>
+        <li><code>Token loaded successfully!</code></li>
+        <li><code>BotMemory: SQLite database initialized.</code></li>
+        <li><code>Bot Successfully Logged In</code></li>
+        <li><code>Bot is running!</code></li>
+        <li><code>Slash commands registered for guild: &lt;Your Server&gt;</code></li>
+      </ol>
+
+      <div class="callout success">
+        <span class="label">Success</span>
+        If you see all five and the bot's status in Discord switched from Offline to Online, you're done.
+      </div>
+
+      <h3>Smoke test in Discord</h3>
+      <ul>
+        <li><code>@YourBot hi</code> — should get a reply within a few seconds.</li>
+        <li>Drop an image in chat <em>(if vision enabled)</em> — bot reacts to it.</li>
+        <li><code>/stfu</code> — bot should reply "Stepping back from this channel."</li>
+        <li><code>/passive-rate 25</code> — sets how often it reacts to non-mention messages.</li>
+      </ul>
+    </section>
+
+    <!-- 9 — Troubleshooting -->
+    <section id="trouble">
+      <h2><span class="num">Step 9</span> Troubleshooting</h2>
+      <table>
+        <tr><th>Symptom</th><th>Fix</th></tr>
+        <tr>
+          <td><code>Discord token is missing!</code></td>
+          <td>Confirm <code>.env</code> is in the repo root (next to <code>Program.cs</code>) and <code>Discord_Token=</code> has a value with no quotes.</td>
+        </tr>
+        <tr>
+          <td>Bot connects but ignores mentions</td>
+          <td><strong>Message Content Intent</strong> isn't enabled. Go back to Step 3 and toggle it on.</td>
+        </tr>
+        <tr>
+          <td>Doesn't see streamers going live</td>
+          <td><strong>Presence Intent</strong> and <strong>Server Members Intent</strong> need to be enabled too.</td>
+        </tr>
+        <tr>
+          <td><code>connection refused</code> to <code>localhost:11434</code></td>
+          <td>Ollama isn't running. Open the Ollama desktop app, or <code>ollama serve</code> on Linux.</td>
+        </tr>
+        <tr>
+          <td><code>model not found</code></td>
+          <td>For local models: <code>ollama pull &lt;the tag in OLLAMA__Model&gt;</code>. For <code>:cloud</code> models: <code>ollama signin</code>.</td>
+        </tr>
+        <tr>
+          <td>Vision returns "not configured"</td>
+          <td><code>OLLAMA__VisionModel</code> is empty or the model isn't pulled. Run <code>ollama pull llava:7b</code>.</td>
+        </tr>
+        <tr>
+          <td>Slash commands don't appear</td>
+          <td>Re-invite the bot with both <code>bot</code> and <code>applications.commands</code> scopes (Step 4).</td>
+        </tr>
+        <tr>
+          <td>Video links don't get re-uploaded</td>
+          <td>Install yt-dlp (Step 1) and confirm <code>yt-dlp --version</code> works.</td>
+        </tr>
+        <tr>
+          <td>Model never uses tools</td>
+          <td>Switch to a model with better function calling: <code>mistral-nemo</code> or <code>llama3.1:8b</code>.</td>
+        </tr>
+      </table>
+
+      <h3>Resetting memory</h3>
+      <p>The bot's SQLite memory lives in <code>bot_memory.db</code>. Delete the file to wipe all user profiles, conversation summaries, and server-culture snapshots. It will be recreated on the next run.</p>
+    </section>
+
+    <footer>
+      <p>For full feature documentation, see <a href="../README.md">README.md</a>. For an AI-assisted walkthrough, point an LLM at <code>setup/agent-guide.md</code>.</p>
+    </footer>
+
+  </main>
+</div>
+
+<script>
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const targetId = btn.getAttribute('data-copy-target');
+      const target = document.getElementById(targetId);
+      if (!target) return;
+      try {
+        await navigator.clipboard.writeText(target.innerText);
+        const original = btn.textContent;
+        btn.textContent = 'Copied';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = original;
+          btn.classList.remove('copied');
+        }, 1500);
+      } catch (e) {
+        // Clipboard API unavailable — silent fail
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

@@ -1,7 +1,26 @@
+## Build output
 bin/
 obj/
+
+## Visual Studio / Rider
+.vs/
+.idea/
 *.user
 *.suo
-.vs/
 *.DotSettings.user
+
+## Local config — NEVER commit secrets
+.env
 appsettings.Development.json
+appsettings.Local.json
+
+## Bot runtime data
+bot_memory.db
+bot_memory.db-journal
+bot_memory.db-wal
+bot_memory.db-shm
+generated_files/
+video_downloads/
+
+## Logs
+*.log
