@@ -1,5 +1,13 @@
 # SolBro
 
+[![.NET 8](https://img.shields.io/badge/.NET-8.0-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/)
+[![C#](https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=csharp&logoColor=white)](https://learn.microsoft.com/dotnet/csharp/)
+[![Discord.Net](https://img.shields.io/badge/Discord.Net-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discordnet.dev/)
+[![Ollama](https://img.shields.io/badge/Ollama-000000?style=for-the-badge&logo=ollama&logoColor=white)](https://ollama.ai)
+[![Semantic Kernel](https://img.shields.io/badge/Semantic_Kernel-512BD4?style=for-the-badge&logo=microsoft&logoColor=white)](https://github.com/microsoft/semantic-kernel)
+[![Self-Hosted](https://img.shields.io/badge/Self--Hosted-success?style=for-the-badge)](#)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](./LICENSE)
+
 **An Ollama-powered Discord bot you actually own.**
 
 SolBro started as a single-purpose tracker for trending Solana meme tokens. Then the AI revolution hit, and it became something else entirely: a full-featured agentic Discord bot that talks, remembers, sees images, reads documents, searches the web, posts GIFs, re-uploads social-media videos, and quietly builds a picture of who's in your server over time — all from a single `dotnet run`.
